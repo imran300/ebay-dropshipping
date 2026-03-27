@@ -25,6 +25,7 @@ class Order extends Model
         'paid_at',
         'ordered_at',
         'shipped_at',
+        'delivered_at',
         'tracking_number',
         'notes',
     ];
@@ -36,6 +37,7 @@ class Order extends Model
             'paid_at' => 'datetime',
             'ordered_at' => 'datetime',
             'shipped_at' => 'datetime',
+            'delivered_at' => 'datetime',
         ];
     }
 

@@ -46,4 +46,9 @@ class Listing extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function revisions(): HasMany
+    {
+        return $this->hasMany(Revision::class);
+    }
 }

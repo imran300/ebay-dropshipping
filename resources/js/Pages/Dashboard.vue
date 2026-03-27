@@ -30,26 +30,26 @@ const formatCurrency = (value) =>
         <div class="py-12">
             <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
                 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
                         <div class="text-sm text-gray-500">Products</div>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.products }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
                         <div class="text-sm text-gray-500">Active listings</div>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.active_listings }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
                         <div class="text-sm text-gray-500">Pending orders</div>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.pending_orders }}</div>
                     </div>
-                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
                         <div class="text-sm text-gray-500">Potential profit</div>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ formatCurrency(stats.potential_profit) }}</div>
                     </div>
                 </div>
 
                 <div class="grid gap-6 xl:grid-cols-3">
-                    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
                         <div class="border-b border-gray-200 px-6 py-4">
                             <h3 class="text-base font-semibold text-gray-900">Recent products</h3>
                         </div>
@@ -62,7 +62,7 @@ const formatCurrency = (value) =>
                         </div>
                     </div>
 
-                    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
                         <div class="border-b border-gray-200 px-6 py-4">
                             <h3 class="text-base font-semibold text-gray-900">Recent listings</h3>
                         </div>
@@ -75,7 +75,7 @@ const formatCurrency = (value) =>
                         </div>
                     </div>
 
-                    <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
                         <div class="border-b border-gray-200 px-6 py-4">
                             <h3 class="text-base font-semibold text-gray-900">Recent orders</h3>
                         </div>

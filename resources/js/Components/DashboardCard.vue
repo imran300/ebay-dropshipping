@@ -1,5 +1,9 @@
 <script setup>
 import { computed } from 'vue';
+import {
+    getDashboardCardClasses,
+    shouldRenderDashboardCardTitle,
+} from '@/Components/dashboardCard';
 
 const props = defineProps({
     title: {
@@ -13,37 +17,18 @@ const props = defineProps({
     },
 });
 
-const rootClasses = computed(() =>
-    props.variant === 'panel'
-        ? 'overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg'
-        : 'rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200'
-);
-
-const bodyClasses = computed(() =>
-    props.variant === 'panel' ? 'divide-y divide-gray-100' : ''
-);
-
-const titleClasses = computed(() =>
-    props.variant === 'panel'
-        ? 'border-b border-gray-200 px-6 py-4'
-        : 'mb-2 text-sm text-gray-500'
-);
+const classes = computed(() => getDashboardCardClasses(props.variant));
+const showTitle = computed(() => shouldRenderDashboardCardTitle(props.title));
 </script>
 
 <template>
-    <div :class="rootClasses">
-        <div v-if="title" :class="titleClasses">
-            <h3
-                :class="
-                    variant === 'panel'
-                        ? 'text-base font-semibold text-gray-900'
-                        : ''
-                "
-            >
+    <div :class="classes.rootClasses">
+        <div v-if="showTitle" :class="classes.titleClasses">
+            <h3 :class="classes.headingClasses">
                 {{ title }}
             </h3>
         </div>
-        <div :class="bodyClasses">
+        <div :class="classes.bodyClasses">
             <slot />
         </div>
     </div>

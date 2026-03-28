@@ -1,10 +1,8 @@
 <?php
 
-declare(strict_types=1);
+namespace App\Services;
 
-namespace Demo;
-
-final class BuggyDemo
+final class BuggyDemoService
 {
     public function calculateProfit(float $salePrice, float $costPrice, float $fees = 0.0): float
     {
@@ -14,13 +12,13 @@ final class BuggyDemo
 
     public function isOrderReady(bool $paid, bool $packed, bool $shipped): bool
     {
-        // Intentional bug: shipped orders should require all flags to be true.
+        // Intentional bug: all flags should be required, but this uses OR.
         return $paid || $packed || $shipped;
     }
 
     public function formatSku(string $prefix, int $sequence): string
     {
-        // Intentional bug: sequence should be zero-padded, but this leaves it raw.
+        // Intentional bug: this should zero-pad the sequence.
         return $prefix . '-' . $sequence;
     }
 }

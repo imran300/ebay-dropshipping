@@ -12,7 +12,7 @@ const showingNavigationDropdown = ref(false);
 const page = usePage();
 
 const navigation = computed(() => {
-    return normalizeNavigation(page.props.navigation);
+    return normalizeNavigation(page.props?.navigation ?? {});
 });
 </script>
 

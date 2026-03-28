@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkMisuseDemoController;
+use App\Http\Controllers\BuggyAnnouncementController;
 use App\Http\Controllers\BuggyUserReportController;
 use App\Http\Controllers\BuggyUserSearchController;
 use App\Http\Controllers\RiskyProfileUpdateDemoController;
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/framework-misuse-demo', [FrameworkMisuseDemoController::class, 'index'])->name('framework-misuse-demo.index');
+    Route::get('/buggy-announcement-demo', [BuggyAnnouncementController::class, 'index'])->name('buggy-announcement-demo.index');
     Route::get('/buggy-user-report-demo', [BuggyUserReportController::class, 'index'])->name('buggy-user-report-demo.index');
     Route::get('/buggy-user-search-demo', [BuggyUserSearchController::class, 'index'])->name('buggy-user-search-demo.index');
     Route::patch('/profile/risky-update-demo', [RiskyProfileUpdateDemoController::class, 'update'])->name('profile.risky-update-demo');

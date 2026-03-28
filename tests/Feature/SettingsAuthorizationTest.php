@@ -18,7 +18,19 @@ class SettingsAuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get(route('dashboard'))
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page->where('can_manage_settings', false));
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('can_manage_settings', false)
+                ->where('navigation.primary.0.label', 'Overview')
+                ->where('navigation.primary.1.label', 'Products')
+                ->where('navigation.primary.2.label', 'Listings')
+                ->where('navigation.primary.3.label', 'Orders')
+                ->missing('navigation.primary.4')
+                ->where('navigation.mobile.0.label', 'Overview')
+                ->where('navigation.mobile.1.label', 'Products')
+                ->where('navigation.mobile.2.label', 'Listings')
+                ->where('navigation.mobile.3.label', 'Orders')
+                ->missing('navigation.mobile.4')
+            );
 
         $this->actingAs($user)
             ->get(route('settings.index'))
@@ -41,7 +53,13 @@ class SettingsAuthorizationTest extends TestCase
         $this->actingAs($admin)
             ->get(route('dashboard'))
             ->assertOk()
-            ->assertInertia(fn (Assert $page) => $page->where('can_manage_settings', true));
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('can_manage_settings', true)
+                ->where('navigation.primary.4.label', 'Settings')
+                ->where('navigation.primary.4.route', 'settings.index')
+                ->where('navigation.mobile.4.label', 'Settings')
+                ->where('navigation.mobile.4.route', 'settings.index')
+            );
 
         $this->actingAs($admin)
             ->get(route('settings.index'))

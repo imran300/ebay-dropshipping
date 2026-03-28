@@ -31,37 +31,22 @@ const formatCurrency = (value) =>
         <div class="py-12">
             <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
                 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <DashboardCard>
-                        <template #title>
-                            <div class="text-sm text-gray-500">Products</div>
-                        </template>
+                    <DashboardCard title="Products">
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.products }}</div>
                     </DashboardCard>
-                    <DashboardCard>
-                        <template #title>
-                            <div class="text-sm text-gray-500">Active listings</div>
-                        </template>
+                    <DashboardCard title="Active listings">
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.active_listings }}</div>
                     </DashboardCard>
-                    <DashboardCard>
-                        <template #title>
-                            <div class="text-sm text-gray-500">Pending orders</div>
-                        </template>
+                    <DashboardCard title="Pending orders">
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.pending_orders }}</div>
                     </DashboardCard>
-                    <DashboardCard>
-                        <template #title>
-                            <div class="text-sm text-gray-500">Potential profit</div>
-                        </template>
+                    <DashboardCard title="Potential profit">
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ formatCurrency(stats.potential_profit) }}</div>
                     </DashboardCard>
                 </div>
 
                 <div class="grid gap-6 xl:grid-cols-3">
-                    <DashboardCard variant="panel">
-                        <template #title>
-                            <h3 class="text-base font-semibold text-gray-900">Recent products</h3>
-                        </template>
+                    <DashboardCard variant="panel" title="Recent products">
                         <div v-for="product in recent_products" :key="product.id" class="px-6 py-4">
                             <div class="font-medium text-gray-900">{{ product.title }}</div>
                             <div class="text-sm text-gray-500">{{ product.category || 'Uncategorized' }} - {{ formatCurrency(product.target_price) }}</div>
@@ -69,10 +54,7 @@ const formatCurrency = (value) =>
                         <div v-if="!recent_products.length" class="px-6 py-8 text-sm text-gray-500">No products yet.</div>
                     </DashboardCard>
 
-                    <DashboardCard variant="panel">
-                        <template #title>
-                            <h3 class="text-base font-semibold text-gray-900">Recent listings</h3>
-                        </template>
+                    <DashboardCard variant="panel" title="Recent listings">
                         <div v-for="listing in recent_listings" :key="listing.id" class="px-6 py-4">
                             <div class="font-medium text-gray-900">{{ listing.title }}</div>
                             <div class="text-sm text-gray-500">{{ listing.product?.title || 'Unknown product' }} - {{ listing.status }}</div>
@@ -80,10 +62,7 @@ const formatCurrency = (value) =>
                         <div v-if="!recent_listings.length" class="px-6 py-8 text-sm text-gray-500">No listings yet.</div>
                     </DashboardCard>
 
-                    <DashboardCard variant="panel">
-                        <template #title>
-                            <h3 class="text-base font-semibold text-gray-900">Recent orders</h3>
-                        </template>
+                    <DashboardCard variant="panel" title="Recent orders">
                         <div v-for="order in recent_orders" :key="order.id" class="px-6 py-4">
                             <div class="font-medium text-gray-900">{{ order.order_number || `Order #${order.id}` }}</div>
                             <div class="text-sm text-gray-500">{{ order.product?.title || 'Unknown product' }} - {{ order.fulfillment_status }}</div>

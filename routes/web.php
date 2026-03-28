@@ -23,8 +23,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{order}/checkout', [OrderController::class, 'checkout'])->name('orders.checkout');
     Route::get('/orders/{order}/checkout/success', [OrderController::class, 'checkoutSuccess'])->name('orders.checkout.success');
-    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::post('/settings', [SettingsController::class, 'store'])->name('settings.store');
+    Route::middleware('can.manage.settings')->group(function () {
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [SettingsController::class, 'store'])->name('settings.store');
+    });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

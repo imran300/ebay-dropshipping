@@ -10,11 +10,16 @@ const props = defineProps({
     settings: Object,
 });
 
+const defaultSettings = {
+    ebay_fee_rate: 0,
+    default_shipping_cost: 0,
+    low_stock_threshold: 1,
+    min_margin_threshold: 0,
+};
+
 const form = useForm({
-    ebay_fee_rate: props.settings.ebay_fee_rate,
-    default_shipping_cost: props.settings.default_shipping_cost,
-    low_stock_threshold: props.settings.low_stock_threshold,
-    min_margin_threshold: props.settings.min_margin_threshold,
+    ...defaultSettings,
+    ...(props.settings ?? {}),
 });
 
 const submit = () => {

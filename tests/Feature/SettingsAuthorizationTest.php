@@ -23,6 +23,15 @@ class SettingsAuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get(route('settings.index'))
             ->assertForbidden();
+
+        $this->actingAs($user)
+            ->post(route('settings.store'), [
+                'ebay_fee_rate' => 12.95,
+                'default_shipping_cost' => 4.99,
+                'low_stock_threshold' => 5,
+                'min_margin_threshold' => 8.50,
+            ])
+            ->assertForbidden();
     }
 
     public function test_admin_users_receive_settings_nav_and_can_access_settings(): void

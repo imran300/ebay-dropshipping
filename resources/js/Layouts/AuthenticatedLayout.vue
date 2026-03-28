@@ -1,13 +1,27 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+const page = usePage();
+
+const navigation = computed(() => {
+    const sharedNavigation = page.props.navigation ?? {};
+
+    return {
+        primary: Array.isArray(sharedNavigation.primary)
+            ? sharedNavigation.primary
+            : [],
+        mobile: Array.isArray(sharedNavigation.mobile)
+            ? sharedNavigation.mobile
+            : [],
+    };
+});
 </script>
 
 <template>
@@ -34,7 +48,7 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    v-for="item in $page.props.navigation.primary"
+                                    v-for="item in navigation.primary || []"
                                     :key="item.route"
                                     :href="route(item.route)"
                                     :active="route().current(item.active)"
@@ -143,7 +157,7 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            v-for="item in $page.props.navigation.mobile"
+                            v-for="item in navigation.mobile || []"
                             :key="item.route"
                             :href="route(item.route)"
                             :active="route().current(item.active)"

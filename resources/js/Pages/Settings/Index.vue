@@ -6,9 +6,13 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
-const props = defineProps({
-    settings: Object,
-});
+/**
+ * @typedef {Object} SettingsData
+ * @property {number} ebay_fee_rate
+ * @property {number} default_shipping_cost
+ * @property {number} low_stock_threshold
+ * @property {number} min_margin_threshold
+ */
 
 const defaultSettings = {
     ebay_fee_rate: 0,
@@ -16,6 +20,30 @@ const defaultSettings = {
     low_stock_threshold: 1,
     min_margin_threshold: 0,
 };
+
+const props = defineProps({
+    settings: {
+        type: Object,
+        default: () => ({
+            ebay_fee_rate: 0,
+            default_shipping_cost: 0,
+            low_stock_threshold: 1,
+            min_margin_threshold: 0,
+        }),
+        validator: (settings) => {
+            if (settings === null || typeof settings !== 'object' || Array.isArray(settings)) {
+                return false;
+            }
+
+            return [
+                'ebay_fee_rate',
+                'default_shipping_cost',
+                'low_stock_threshold',
+                'min_margin_threshold',
+            ].every((key) => typeof settings[key] === 'number');
+        },
+    },
+});
 
 const form = useForm({
     ...defaultSettings,

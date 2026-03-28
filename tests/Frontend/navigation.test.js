@@ -35,3 +35,29 @@ test('normalizeNavigation preserves valid navigation arrays', () => {
 
     assert.deepStrictEqual(normalizeNavigation(navigation), navigation);
 });
+
+test('normalizeNavigation removes malformed items', () => {
+    assert.deepStrictEqual(
+        normalizeNavigation({
+            primary: [
+                { label: 'Overview', route: 'dashboard', active: 'dashboard' },
+                { label: '', route: 'products.index', active: 'products.*' },
+                { label: 'Orders', route: null, active: 'orders.*' },
+                { label: 'Settings', route: 'settings.index', active: '' },
+                null,
+            ],
+            mobile: [
+                undefined,
+                { label: 'Listings', route: 'listings.index', active: 'listings.*' },
+            ],
+        }),
+        {
+            primary: [
+                { label: 'Overview', route: 'dashboard', active: 'dashboard' },
+            ],
+            mobile: [
+                { label: 'Listings', route: 'listings.index', active: 'listings.*' },
+            ],
+        }
+    );
+});

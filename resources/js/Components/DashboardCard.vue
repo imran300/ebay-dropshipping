@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import {
     getDashboardCardClasses,
     shouldRenderDashboardCardTitle,
-} from '@/Components/dashboardCard';
+} from '@/Components/DashboardCard';
 
 const props = defineProps({
     title: {

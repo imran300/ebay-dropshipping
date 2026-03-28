@@ -11,6 +11,11 @@ import { normalizeNavigation } from '@/Layouts/navigation';
 const showingNavigationDropdown = ref(false);
 const page = usePage();
 
+const authUser = computed(() => page.props?.auth?.user ?? {
+    name: '',
+    email: '',
+});
+
 const navigation = computed(() => {
     return normalizeNavigation(page.props?.navigation ?? {});
 });
@@ -40,7 +45,7 @@ const navigation = computed(() => {
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    v-for="item in navigation.primary || []"
+                                    v-for="item in navigation.primary"
                                     :key="item.route"
                                     :href="route(item.route)"
                                     :active="route().current(item.active)"
@@ -60,7 +65,7 @@ const navigation = computed(() => {
                                                 type="button"
                                                 class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                                             >
-                                                {{ $page.props.auth.user.name }}
+                                                {{ authUser.name }}
 
                                                 <svg
                                                     class="-me-0.5 ms-2 h-4 w-4"
@@ -166,10 +171,10 @@ const navigation = computed(() => {
                             <div
                                 class="text-base font-medium text-gray-800"
                             >
-                                {{ $page.props.auth.user.name }}
+                                {{ authUser.name }}
                             </div>
                             <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
+                                {{ authUser.email }}
                             </div>
                         </div>
 

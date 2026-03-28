@@ -11,6 +11,8 @@ class SettingsController extends Controller
 {
     public function index(Request $request, SettingsService $settingsService): Response
     {
+        abort_unless($request->user()?->is_admin, 403);
+
         return Inertia::render('Settings/Index', [
             'settings' => $settingsService->getForUser($request->user()->id),
         ]);
@@ -18,6 +20,8 @@ class SettingsController extends Controller
 
     public function store(Request $request, SettingsService $settingsService)
     {
+        abort_unless($request->user()?->is_admin, 403);
+
         $validated = $request->validate([
             'ebay_fee_rate' => ['required', 'numeric', 'between:0,100'],
             'default_shipping_cost' => ['required', 'numeric', 'min:0'],
@@ -32,4 +36,3 @@ class SettingsController extends Controller
             ->with('success', 'Settings updated.');
     }
 }
-

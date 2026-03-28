@@ -1,4 +1,5 @@
 <script setup>
+import DashboardCard from '@/Components/DashboardCard.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 
@@ -30,63 +31,65 @@ const formatCurrency = (value) =>
         <div class="py-12">
             <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
                 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
-                        <div class="text-sm text-gray-500">Products</div>
+                    <DashboardCard>
+                        <template #title>
+                            <div class="text-sm text-gray-500">Products</div>
+                        </template>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.products }}</div>
-                    </div>
-                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
-                        <div class="text-sm text-gray-500">Active listings</div>
+                    </DashboardCard>
+                    <DashboardCard>
+                        <template #title>
+                            <div class="text-sm text-gray-500">Active listings</div>
+                        </template>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.active_listings }}</div>
-                    </div>
-                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
-                        <div class="text-sm text-gray-500">Pending orders</div>
+                    </DashboardCard>
+                    <DashboardCard>
+                        <template #title>
+                            <div class="text-sm text-gray-500">Pending orders</div>
+                        </template>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ stats.pending_orders }}</div>
-                    </div>
-                    <div class="rounded-lg bg-blue-100 p-6 shadow-sm ring-1 ring-blue-200">
-                        <div class="text-sm text-gray-500">Potential profit</div>
+                    </DashboardCard>
+                    <DashboardCard>
+                        <template #title>
+                            <div class="text-sm text-gray-500">Potential profit</div>
+                        </template>
                         <div class="mt-2 text-3xl font-semibold text-gray-900">{{ formatCurrency(stats.potential_profit) }}</div>
-                    </div>
+                    </DashboardCard>
                 </div>
 
                 <div class="grid gap-6 xl:grid-cols-3">
-                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <DashboardCard variant="panel">
+                        <template #title>
                             <h3 class="text-base font-semibold text-gray-900">Recent products</h3>
+                        </template>
+                        <div v-for="product in recent_products" :key="product.id" class="px-6 py-4">
+                            <div class="font-medium text-gray-900">{{ product.title }}</div>
+                            <div class="text-sm text-gray-500">{{ product.category || 'Uncategorized' }} - {{ formatCurrency(product.target_price) }}</div>
                         </div>
-                        <div class="divide-y divide-gray-100">
-                            <div v-for="product in recent_products" :key="product.id" class="px-6 py-4">
-                                <div class="font-medium text-gray-900">{{ product.title }}</div>
-                                <div class="text-sm text-gray-500">{{ product.category || 'Uncategorized' }} - {{ formatCurrency(product.target_price) }}</div>
-                            </div>
-                            <div v-if="!recent_products.length" class="px-6 py-8 text-sm text-gray-500">No products yet.</div>
-                        </div>
-                    </div>
+                        <div v-if="!recent_products.length" class="px-6 py-8 text-sm text-gray-500">No products yet.</div>
+                    </DashboardCard>
 
-                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <DashboardCard variant="panel">
+                        <template #title>
                             <h3 class="text-base font-semibold text-gray-900">Recent listings</h3>
+                        </template>
+                        <div v-for="listing in recent_listings" :key="listing.id" class="px-6 py-4">
+                            <div class="font-medium text-gray-900">{{ listing.title }}</div>
+                            <div class="text-sm text-gray-500">{{ listing.product?.title || 'Unknown product' }} - {{ listing.status }}</div>
                         </div>
-                        <div class="divide-y divide-gray-100">
-                            <div v-for="listing in recent_listings" :key="listing.id" class="px-6 py-4">
-                                <div class="font-medium text-gray-900">{{ listing.title }}</div>
-                                <div class="text-sm text-gray-500">{{ listing.product?.title || 'Unknown product' }} - {{ listing.status }}</div>
-                            </div>
-                            <div v-if="!recent_listings.length" class="px-6 py-8 text-sm text-gray-500">No listings yet.</div>
-                        </div>
-                    </div>
+                        <div v-if="!recent_listings.length" class="px-6 py-8 text-sm text-gray-500">No listings yet.</div>
+                    </DashboardCard>
 
-                    <div class="overflow-hidden bg-blue-100 shadow-sm ring-1 ring-blue-200 sm:rounded-lg">
-                        <div class="border-b border-gray-200 px-6 py-4">
+                    <DashboardCard variant="panel">
+                        <template #title>
                             <h3 class="text-base font-semibold text-gray-900">Recent orders</h3>
+                        </template>
+                        <div v-for="order in recent_orders" :key="order.id" class="px-6 py-4">
+                            <div class="font-medium text-gray-900">{{ order.order_number || `Order #${order.id}` }}</div>
+                            <div class="text-sm text-gray-500">{{ order.product?.title || 'Unknown product' }} - {{ order.fulfillment_status }}</div>
                         </div>
-                        <div class="divide-y divide-gray-100">
-                            <div v-for="order in recent_orders" :key="order.id" class="px-6 py-4">
-                                <div class="font-medium text-gray-900">{{ order.order_number || `Order #${order.id}` }}</div>
-                                <div class="text-sm text-gray-500">{{ order.product?.title || 'Unknown product' }} - {{ order.fulfillment_status }}</div>
-                            </div>
-                            <div v-if="!recent_orders.length" class="px-6 py-8 text-sm text-gray-500">No orders yet.</div>
-                        </div>
-                    </div>
+                        <div v-if="!recent_orders.length" class="px-6 py-8 text-sm text-gray-500">No orders yet.</div>
+                    </DashboardCard>
                 </div>
             </div>
         </div>

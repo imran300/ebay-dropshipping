@@ -1,0 +1,76 @@
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
+import { Head, useForm } from '@inertiajs/vue3';
+
+const props = defineProps({
+    settings: Object,
+});
+
+const form = useForm({
+    ebay_fee_rate: props.settings.ebay_fee_rate,
+    default_shipping_cost: props.settings.default_shipping_cost,
+    low_stock_threshold: props.settings.low_stock_threshold,
+    min_margin_threshold: props.settings.min_margin_threshold,
+});
+
+const submit = () => {
+    form.post(route('settings.store'));
+};
+</script>
+
+<template>
+    <Head title="Settings" />
+
+    <AuthenticatedLayout>
+        <template #header>
+            <div>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800">Settings</h2>
+                <p class="mt-1 text-sm text-gray-600">Tune fee, shipping, stock, and margin assumptions for your store.</p>
+            </div>
+        </template>
+
+        <div class="py-12">
+            <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+                    <form class="space-y-6 p-6" @submit.prevent="submit">
+                        <div class="grid gap-6 md:grid-cols-2">
+                            <div>
+                                <InputLabel for="ebay_fee_rate" value="eBay fee rate (%)" />
+                                <TextInput id="ebay_fee_rate" v-model="form.ebay_fee_rate" type="number" min="0" step="0.01" class="mt-1 block w-full" />
+                                <InputError class="mt-2" :message="form.errors.ebay_fee_rate" />
+                            </div>
+
+                            <div>
+                                <InputLabel for="default_shipping_cost" value="Default shipping cost" />
+                                <TextInput id="default_shipping_cost" v-model="form.default_shipping_cost" type="number" min="0" step="0.01" class="mt-1 block w-full" />
+                                <InputError class="mt-2" :message="form.errors.default_shipping_cost" />
+                            </div>
+
+                            <div>
+                                <InputLabel for="low_stock_threshold" value="Low stock threshold" />
+                                <TextInput id="low_stock_threshold" v-model="form.low_stock_threshold" type="number" min="1" step="1" class="mt-1 block w-full" />
+                                <InputError class="mt-2" :message="form.errors.low_stock_threshold" />
+                            </div>
+
+                            <div>
+                                <InputLabel for="min_margin_threshold" value="Minimum margin threshold" />
+                                <TextInput id="min_margin_threshold" v-model="form.min_margin_threshold" type="number" min="0" step="0.01" class="mt-1 block w-full" />
+                                <InputError class="mt-2" :message="form.errors.min_margin_threshold" />
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                Save settings
+                            </PrimaryButton>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>

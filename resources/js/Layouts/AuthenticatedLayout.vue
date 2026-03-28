@@ -58,6 +58,7 @@ const showingNavigationDropdown = ref(false);
                                     Orders
                                 </NavLink>
                                 <NavLink
+                                    v-if="$page.props.can_manage_settings"
                                     :href="route('settings.index')"
                                     :active="route().current('settings.*')"
                                 >
@@ -189,6 +190,7 @@ const showingNavigationDropdown = ref(false);
                             Orders
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.can_manage_settings"
                             :href="route('settings.index')"
                             :active="route().current('settings.*')"
                         >

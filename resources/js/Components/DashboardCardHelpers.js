@@ -2,6 +2,10 @@ export function shouldRenderDashboardCardTitle(title) {
     return title !== '' && title != null;
 }
 
+/**
+ * @param {string} [variant]
+ * @returns {{ rootClasses: string, bodyClasses: string, titleClasses: string, headingClasses: string }}
+ */
 export function getDashboardCardClasses(variant = 'stat') {
     const isPanel = variant === 'panel';
 
@@ -17,4 +21,45 @@ export function getDashboardCardClasses(variant = 'stat') {
             ? 'text-base font-semibold text-gray-900'
             : '',
     };
+}
+
+/**
+ * Merges a partial / untrusted helper result with defaults so DashboardCard never reads undefined keys.
+ *
+ * @param {unknown} partial
+ * @param {string} [variant]
+ * @returns {{ rootClasses: string, bodyClasses: string, titleClasses: string, headingClasses: string }}
+ */
+export function mergeDashboardCardClasses(partial, variant = 'stat') {
+    const base = getDashboardCardClasses(variant);
+    if (!partial || typeof partial !== 'object') {
+        return { ...base };
+    }
+
+    return {
+        rootClasses:
+            typeof partial.rootClasses === 'string'
+                ? partial.rootClasses
+                : base.rootClasses,
+        bodyClasses:
+            typeof partial.bodyClasses === 'string'
+                ? partial.bodyClasses
+                : base.bodyClasses,
+        titleClasses:
+            typeof partial.titleClasses === 'string'
+                ? partial.titleClasses
+                : base.titleClasses,
+        headingClasses:
+            typeof partial.headingClasses === 'string'
+                ? partial.headingClasses
+                : base.headingClasses,
+    };
+}
+
+export function safeShouldRenderDashboardCardTitle(title) {
+    try {
+        return shouldRenderDashboardCardTitle(title);
+    } catch {
+        return false;
+    }
 }

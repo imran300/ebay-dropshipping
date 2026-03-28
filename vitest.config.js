@@ -1,15 +1,10 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
     plugins: [
-        laravel({
-            input: 'resources/js/app.js',
-            refresh: true,
-        }),
         vue({
             template: {
                 transformAssetUrls: {
@@ -23,5 +18,10 @@ export default defineConfig({
         alias: {
             '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
         },
+    },
+    test: {
+        environment: 'happy-dom',
+        setupFiles: ['./tests/Frontend/setup/vitest.setup.js'],
+        include: ['tests/Frontend/**/*.test.js'],
     },
 });

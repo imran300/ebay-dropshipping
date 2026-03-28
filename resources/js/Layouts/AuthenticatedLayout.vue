@@ -5,7 +5,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import AuthenticatedUserMenu from '@/Components/AuthenticatedUserMenu.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { normalizeNavigation } from '@/Layouts/navigation';
+import { getLayoutNavigation } from '@/Layouts/navigation';
 
 const showingNavigationDropdown = ref(false);
 const page = usePage();
@@ -15,9 +15,9 @@ const authUser = computed(() => page.props?.auth?.user ?? {
     email: '',
 });
 
-const navigation = computed(() => {
-    return normalizeNavigation(page.props?.navigation ?? {});
-});
+const navigation = computed(() =>
+    getLayoutNavigation(page.props?.navigation),
+);
 </script>
 
 <template>
@@ -44,7 +44,7 @@ const navigation = computed(() => {
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    v-for="item in navigation.primary || []"
+                                    v-for="item in navigation.primary"
                                     :key="item.route"
                                     :href="route(item.route)"
                                     :active="route().current(item.active)"
@@ -111,7 +111,7 @@ const navigation = computed(() => {
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            v-for="item in navigation.mobile || []"
+                            v-for="item in navigation.mobile"
                             :key="item.route"
                             :href="route(item.route)"
                             :active="route().current(item.active)"

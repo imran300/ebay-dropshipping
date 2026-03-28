@@ -2,7 +2,8 @@
 import { computed } from 'vue';
 import {
     getDashboardCardClasses,
-    shouldRenderDashboardCardTitle,
+    mergeDashboardCardClasses,
+    safeShouldRenderDashboardCardTitle,
 } from '@/Components/DashboardCardHelpers';
 
 const props = defineProps({
@@ -17,8 +18,18 @@ const props = defineProps({
     },
 });
 
-const classes = computed(() => getDashboardCardClasses(props.variant));
-const showTitle = computed(() => shouldRenderDashboardCardTitle(props.title));
+const classes = computed(() => {
+    try {
+        return mergeDashboardCardClasses(
+            getDashboardCardClasses(props.variant),
+            props.variant,
+        );
+    } catch {
+        return mergeDashboardCardClasses(null, props.variant);
+    }
+});
+
+const showTitle = computed(() => safeShouldRenderDashboardCardTitle(props.title));
 </script>
 
 <template>

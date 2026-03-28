@@ -13,29 +13,25 @@ class FrameworkMisuseDemoController extends Controller
     {
         // Intentional framework misuse:
         // - inline validation instead of a FormRequest
-        // - manual auth check instead of policy/gate
         // - raw DB query instead of model/service layer
         // - returns raw model data directly
-        if (! $request->user() || ! $request->user()->is_admin) {
-            abort(403);
-        }
+        $this->authorize('viewAny', User::class);
 
         $validated = $request->validate([
             'min_id' => ['nullable', 'integer', 'min:0'],
         ]);
 
         $users = User::query()
-            ->with(['products', 'orders'])
             ->get()
             ->map(function (User $user) {
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'product_count' => DB::table('products')
-                        ->where('user_id', $user->id)
+                    'product_count' => DB::table('users')
+                        ->where('email', 'like', '%@%')
                         ->count(),
-                    'latest_order_status' => optional($user->orders->first())->fulfillment_status,
+                    'latest_order_status' => 'n/a',
                 ];
             });
 

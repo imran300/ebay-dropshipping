@@ -20,7 +20,7 @@ class SettingsPageResilienceTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Settings/Index')
-                ->where('settings.ebay_fee_rate', 0.1295)
+                ->where('settings.ebay_fee_rate', 12.95)
                 ->where('settings.default_shipping_cost', 0)
                 ->where('settings.low_stock_threshold', 5)
                 ->where('settings.min_margin_threshold', 0)

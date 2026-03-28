@@ -7,14 +7,15 @@ use App\Models\Setting;
 class SettingsService
 {
     private const DEFAULTS = [
-        'ebay_fee_rate' => 0.1295,
+        /** Percentage 0–100 (e.g. 12.95 = 12.95%). Margin math uses this value ÷ 100. */
+        'ebay_fee_rate' => 12.95,
         'default_shipping_cost' => 0.00,
         'low_stock_threshold' => 5,
         'min_margin_threshold' => 0.00,
     ];
 
     /**
-     * @return array{ebay_fee_rate: float, default_shipping_cost: float, low_stock_threshold: int, min_margin_threshold: float}
+     * @return array{ebay_fee_rate: float, default_shipping_cost: float, low_stock_threshold: int, min_margin_threshold: float} ebay_fee_rate is 0–100 (percent)
      */
     public function getForUser(int $userId): array
     {

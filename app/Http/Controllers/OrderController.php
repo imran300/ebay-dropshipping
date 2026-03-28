@@ -69,6 +69,13 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('error', $exception->getMessage());
         }
 
+        $metadata = $session['metadata'] ?? [];
+        if (! is_array($metadata)
+            || ($metadata['order_id'] ?? '') !== (string) $order->id
+            || ($metadata['user_id'] ?? '') !== (string) $order->user_id) {
+            return redirect()->route('orders.index')->with('error', 'Checkout session does not match this order.');
+        }
+
         if (($session['payment_status'] ?? null) !== 'paid') {
             return redirect()->route('orders.index')->with('error', 'Payment was not completed.');
         }

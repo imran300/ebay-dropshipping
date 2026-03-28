@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Listing;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -64,6 +65,90 @@ class DashboardTest extends TestCase
                 ->has('recent_products', 1)
                 ->has('recent_listings', 1)
                 ->has('recent_orders', 1)
+            );
+    }
+
+    public function test_dashboard_active_listings_count_excludes_non_active_statuses(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::create([
+            'user_id' => $user->id,
+            'title' => 'Item',
+            'cost' => 1.00,
+            'target_price' => 2.00,
+            'stock_quantity' => 10,
+            'listing_status' => 'draft',
+        ]);
+
+        Listing::create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'title' => 'Live',
+            'price' => 2.00,
+            'quantity' => 1,
+            'status' => 'active',
+        ]);
+
+        Listing::create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'title' => 'Draft',
+            'price' => 2.00,
+            'quantity' => 1,
+            'status' => 'draft',
+        ]);
+
+        Listing::create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'title' => 'Legacy listed label',
+            'price' => 2.00,
+            'quantity' => 1,
+            'status' => 'listed',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('stats.active_listings', 1)
+            );
+    }
+
+    public function test_dashboard_low_stock_uses_settings_threshold(): void
+    {
+        $user = User::factory()->create();
+
+        Setting::query()->create([
+            'user_id' => $user->id,
+            'key' => 'low_stock_threshold',
+            'value' => '3',
+        ]);
+
+        Product::create([
+            'user_id' => $user->id,
+            'title' => 'High stock',
+            'cost' => 1.00,
+            'target_price' => 2.00,
+            'stock_quantity' => 10,
+            'listing_status' => 'draft',
+        ]);
+
+        Product::create([
+            'user_id' => $user->id,
+            'title' => 'At threshold',
+            'cost' => 1.00,
+            'target_price' => 2.00,
+            'stock_quantity' => 3,
+            'listing_status' => 'draft',
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('stats.low_stock', 1)
             );
     }
 }

@@ -79,6 +79,10 @@ class OrderStripeCheckoutTest extends TestCase
                 'id' => 'cs_test_456',
                 'payment_status' => 'paid',
                 'payment_intent' => 'pi_test_789',
+                'metadata' => [
+                    'order_id' => (string) $order->id,
+                    'user_id' => (string) $user->id,
+                ],
             ]);
 
         $this->app->instance(StripeCheckoutService::class, $stripeCheckoutService);
@@ -114,5 +118,46 @@ class OrderStripeCheckoutTest extends TestCase
         $this->actingAs($attacker)
             ->post(route('orders.checkout', $order))
             ->assertForbidden();
+    }
+
+    public function test_checkout_success_rejects_session_whose_metadata_does_not_match_order(): void
+    {
+        $user = User::factory()->create();
+
+        $order = Order::create([
+            'user_id' => $user->id,
+            'order_number' => 'ORDER-104',
+            'sale_price' => 10.00,
+            'quantity' => 1,
+            'fulfillment_status' => 'pending',
+            'payment_status' => 'pending',
+            'stripe_checkout_session_id' => 'cs_test_other',
+        ]);
+
+        $stripeCheckoutService = Mockery::mock(StripeCheckoutService::class);
+        $stripeCheckoutService
+            ->shouldReceive('retrieveSession')
+            ->once()
+            ->with('cs_test_other')
+            ->andReturn([
+                'id' => 'cs_test_other',
+                'payment_status' => 'paid',
+                'payment_intent' => 'pi_wrong',
+                'metadata' => [
+                    'order_id' => '999999',
+                    'user_id' => (string) $user->id,
+                ],
+            ]);
+
+        $this->app->instance(StripeCheckoutService::class, $stripeCheckoutService);
+
+        $this->actingAs($user)
+            ->get(route('orders.checkout.success', $order).'?session_id=cs_test_other')
+            ->assertRedirect(route('orders.index'));
+
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'payment_status' => 'pending',
+        ]);
     }
 }

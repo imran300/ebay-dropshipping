@@ -44,10 +44,18 @@ class StripeCheckoutService
     {
         $session = $this->client()->checkout->sessions->retrieve($sessionId);
 
+        $metadata = [];
+        if ($session->metadata !== null) {
+            foreach ($session->metadata as $key => $value) {
+                $metadata[(string) $key] = $value !== null ? (string) $value : '';
+            }
+        }
+
         return [
             'id' => $session->id,
             'payment_status' => $session->payment_status,
             'payment_intent' => $session->payment_intent,
+            'metadata' => $metadata,
         ];
     }
 

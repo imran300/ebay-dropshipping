@@ -4,7 +4,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 /**
  * @typedef {Object} SettingsData
@@ -15,9 +16,9 @@ import { Head, useForm } from '@inertiajs/vue3';
  */
 
 const defaultSettings = {
-    ebay_fee_rate: 0,
+    ebay_fee_rate: 12.95,
     default_shipping_cost: 0,
-    low_stock_threshold: 1,
+    low_stock_threshold: 5,
     min_margin_threshold: 0,
 };
 
@@ -25,9 +26,9 @@ const props = defineProps({
     settings: {
         type: Object,
         default: () => ({
-            ebay_fee_rate: 0,
+            ebay_fee_rate: 12.95,
             default_shipping_cost: 0,
-            low_stock_threshold: 1,
+            low_stock_threshold: 5,
             min_margin_threshold: 0,
         }),
         validator: (settings) => {
@@ -50,6 +51,9 @@ const form = useForm({
     ...(props.settings ?? {}),
 });
 
+const page = usePage();
+const flash = computed(() => page.props.flash ?? {});
+
 const submit = () => {
     form.post(route('settings.store'));
 };
@@ -68,12 +72,21 @@ const submit = () => {
 
         <div class="py-12">
             <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                <div v-if="flash.success || flash.error" class="mb-4 space-y-2">
+                    <div v-if="flash.success" class="rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                        {{ flash.success }}
+                    </div>
+                    <div v-if="flash.error" class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                        {{ flash.error }}
+                    </div>
+                </div>
+
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <form class="space-y-6 p-6" @submit.prevent="submit">
                         <div class="grid gap-6 md:grid-cols-2">
                             <div>
                                 <InputLabel for="ebay_fee_rate" value="eBay fee rate (%)" />
-                                <TextInput id="ebay_fee_rate" v-model="form.ebay_fee_rate" type="number" min="0" step="0.01" class="mt-1 block w-full" />
+                                <TextInput id="ebay_fee_rate" v-model="form.ebay_fee_rate" type="number" min="0" max="100" step="0.01" class="mt-1 block w-full" />
                                 <InputError class="mt-2" :message="form.errors.ebay_fee_rate" />
                             </div>
 

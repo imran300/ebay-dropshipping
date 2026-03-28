@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {
     getDashboardCardClasses,
     shouldRenderDashboardCardTitle,
-} from '../../resources/js/Components/DashboardCard.js';
+} from '../../resources/js/Components/DashboardCardHelpers.js';
 
 test('dashboard card uses stat variant classes by default', () => {
     assert.deepStrictEqual(getDashboardCardClasses(), {

@@ -29,46 +29,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        $primaryNavigation = [
-            [
-                'label' => 'Overview',
-                'route' => 'dashboard',
-                'active' => 'dashboard',
-            ],
-            [
-                'label' => 'Products',
-                'route' => 'products.index',
-                'active' => 'products.*',
-            ],
-            [
-                'label' => 'Listings',
-                'route' => 'listings.index',
-                'active' => 'listings.*',
-            ],
-            [
-                'label' => 'Orders',
-                'route' => 'orders.index',
-                'active' => 'orders.*',
-            ],
-        ];
-
-        if ($request->user()?->is_admin) {
-            $primaryNavigation[] = [
-                'label' => 'Settings',
-                'route' => 'settings.index',
-                'active' => 'settings.*',
-            ];
-        }
-
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-            ],
-            'can_manage_settings' => fn () => (bool) $request->user()?->is_admin,
-            'navigation' => [
-                'primary' => $primaryNavigation,
-                'mobile' => $primaryNavigation,
             ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),

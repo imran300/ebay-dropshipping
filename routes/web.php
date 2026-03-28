@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkMisuseDemoController;
+use App\Http\Controllers\RiskyProfileUpdateDemoController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/framework-misuse-demo', [FrameworkMisuseDemoController::class, 'index'])->name('framework-misuse-demo.index');
+    Route::patch('/profile/risky-update-demo', [RiskyProfileUpdateDemoController::class, 'update'])->name('profile.risky-update-demo');
 });
 
 require __DIR__.'/auth.php';

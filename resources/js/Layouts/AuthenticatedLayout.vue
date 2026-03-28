@@ -44,7 +44,7 @@ const navigation = computed(() => {
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
-                                    v-for="item in navigation.primary"
+                                    v-for="item in navigation.primary || []"
                                     :key="item.route"
                                     :href="route(item.route)"
                                     :active="route().current(item.active)"

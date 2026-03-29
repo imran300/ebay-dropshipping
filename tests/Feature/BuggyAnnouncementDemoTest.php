@@ -20,4 +20,15 @@ class BuggyAnnouncementDemoTest extends TestCase
             ]))
             ->assertOk();
     }
+
+    public function test_authenticated_users_can_reach_the_vulnerable_demo_variant(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('buggy-announcement-vulnerable-demo.index', [
+                'message' => '<strong>announcement</strong>',
+            ]))
+            ->assertOk();
+    }
 }

@@ -11,12 +11,12 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Buggy Announcement Demo" />
+    <Head title="Buggy Announcement Vulnerable Demo" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Buggy Announcement Demo
+                Buggy Announcement Vulnerable Demo
             </h2>
         </template>
 
@@ -24,16 +24,15 @@ defineProps({
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="space-y-4 p-6 text-gray-900">
-                        <p class="text-sm text-gray-600">
-                            Safe default: request content is escaped before it is
-                            displayed.
+                        <p class="text-sm text-amber-700">
+                            Educational demo only: this variant intentionally
+                            renders untrusted HTML with v-html.
                         </p>
 
                         <div
-                            class="rounded border border-slate-200 bg-slate-50 p-4 whitespace-pre-wrap"
-                        >
-                            {{ announcementHtml }}
-                        </div>
+                            class="rounded border border-red-200 bg-red-50 p-4"
+                            v-html="announcementHtml"
+                        ></div>
                     </div>
                 </div>
             </div>

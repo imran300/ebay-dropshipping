@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FrameworkMisuseDemoController;
 use App\Http\Controllers\BuggyAnnouncementController;
+use App\Http\Controllers\BuggyAnnouncementVulnerableController;
 use App\Http\Controllers\BuggyUserExportController;
 use App\Http\Controllers\BuggyUserReportController;
 use App\Http\Controllers\BuggyUserSearchController;
@@ -22,7 +23,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware()->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/framework-misuse-demo', [FrameworkMisuseDemoController::class, 'index'])->name('framework-misuse-demo.index');
     Route::get('/buggy-announcement-demo', [BuggyAnnouncementController::class, 'index'])->name('buggy-announcement-demo.index');
+    Route::get('/buggy-announcement-vulnerable-demo', [BuggyAnnouncementVulnerableController::class, 'index'])->name('buggy-announcement-vulnerable-demo.index');
     Route::get('/buggy-user-export-demo', [BuggyUserExportController::class, 'index'])->name('buggy-user-export-demo.index');
     Route::get('/buggy-user-report-demo', [BuggyUserReportController::class, 'index'])->name('buggy-user-report-demo.index');
     Route::get('/buggy-user-search-demo', [BuggyUserSearchController::class, 'index'])->name('buggy-user-search-demo.index');
